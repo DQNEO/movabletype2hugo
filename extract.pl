@@ -48,12 +48,11 @@ for my $entry (@$entries) {
 sub make_entry_file {
     my ($out_dir, $filename, $front_matter, $text, $more_text) = @_;
 
-    print $front_matter->to_text;
-    return;
     open(my $fh,  ">", $out_dir . "/" . $filename);
 
+    print $fh $front_matter->to_text;
+    print $fh "\n";
     print $fh $text;
-
     if ($more_text) {
         print $fh '<!--more-->';
         print $fh $more_text;
@@ -146,5 +145,5 @@ sub to_text {
     push @lines, "date = \"" . $self->{date}->datetime . $time_shift . "\"\n";
     push @lines, "title = \"" . $self->{title} . "\"\n";
     push @lines, "categories = [" . join(",", @categories) . "]\n";
-    return "+++\n" . (join "", @lines) . "+++\n";
+    return "+++\n" . (join "", @lines) . "\n+++\n";
 }
