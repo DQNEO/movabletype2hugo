@@ -14,7 +14,7 @@ my $passwd = shift;
 my $dbname = shift;
 
 # make output directory
-my $out_dir = "public";
+my $out_dir = "content";
 mkdir($out_dir) if ! -d $out_dir;
 
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
