@@ -44,7 +44,7 @@ for my $row (@$rows) {
 
     #warn Dumper $row;
     my $front_matter = FrontMatter->new({
-        date => "2015-06-22T20:17:39+09:00",
+        date => $t,
         title => $row->{entry_title},
         categories => [ "Development" ],
     });
@@ -71,6 +71,7 @@ sub make_entry_file {
 
 package FrontMatter;
 
+
 sub new {
     my ($class, $self) = @_;
     bless $self, $class;
@@ -78,8 +79,10 @@ sub new {
 
 sub to_text {
     my $self = shift;
+    my $time_shift = "+09:00";
+
     my $text = "+++\n";
-    $text .= "date = \"2015-06-22T20:05:11+09:00\"\n";
+    $text .= "date = \"" . $self->{date}->datetime . $time_shift . "\"\n";
     $text .= "title = \"" . $self->{title} . "\"\n";
     $text .= "categories = [" . "]\n";
     $text .= "+++\n";
