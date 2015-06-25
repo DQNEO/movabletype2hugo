@@ -19,10 +19,7 @@ mkdir($out_dir) if ! -d $out_dir;
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
 my $db = MTDB->new({dbh=>$dbh});
 my $cats_master = $db->get_categories_master;
-my $entry_cat_rel = $db->get_relation;
-
-warn Dumper $entry_cat_rel;
-exit;
+my $relation = $db->get_relation;
 
 my $entries = $db->get_entries;
 
@@ -35,10 +32,13 @@ for my $entry (@$entries) {
         , $entry->{entry_basename});
 
     #warn Dumper $entry;
+
+    my $cat_ids = $relation->{$entry->{entry_id}};
+    my @categories = map { $cats_master->{$_}} @$cat_ids;
     my $front_matter = FrontMatter->new({
         date => $t,
         title => $entry->{entry_title},
-        categories => [ "Development" ],
+        categories => \@categories,
     });
 
     make_entry_file($out_dir , $permalink, $front_matter, $entry->{entry_text}, $entry->{entry_text_more});
@@ -138,12 +138,13 @@ sub new {
 sub to_text {
     my $self = shift;
     my $time_shift = "+09:00";
+    my @categories = map {'"'. $_ . '"'} @{$self->{categories}};
 
     $self->{title} =~ s/"/\\"/g;
     my $text = "+++\n";
     $text .= "date = \"" . $self->{date}->datetime . $time_shift . "\"\n";
     $text .= "title = \"" . $self->{title} . "\"\n";
-    $text .= "categories = [" . "]\n";
+    $text .= "categories = [" . join(",", @categories) . "]\n";
     $text .= "+++\n";
     return $text;
 }
