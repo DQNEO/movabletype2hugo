@@ -19,9 +19,9 @@ mkdir($out_dir) if ! -d $out_dir;
 
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
 my $db = MTDB->new({dbh=>$dbh});
+
 my $cats_master = $db->get_categories_master;
 my $relation = $db->get_relation;
-
 my $entries = $db->get_entries;
 
 for my $entry (@$entries) {
