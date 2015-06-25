@@ -142,10 +142,9 @@ sub to_text {
     my @categories = map {'"'. $_ . '"'} @{$self->{categories}};
 
     $self->{title} =~ s/"/\\"/g;
-    my $text = "+++\n";
-    $text .= "date = \"" . $self->{date}->datetime . $time_shift . "\"\n";
-    $text .= "title = \"" . $self->{title} . "\"\n";
-    $text .= "categories = [" . join(",", @categories) . "]\n";
-    $text .= "+++\n";
-    return $text;
+    my @lines;
+    push @lines, "date = \"" . $self->{date}->datetime . $time_shift . "\"\n";
+    push @lines, "title = \"" . $self->{title} . "\"\n";
+    push @lines, "categories = [" . join(",", @categories) . "]\n";
+    return "+++\n" . (join "", @lines) . "+++\n";
 }
