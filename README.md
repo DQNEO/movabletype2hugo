@@ -29,5 +29,7 @@ http://qiita.com/DQNEO/items/7c05252fa434c861d938
 
 # Usagee
 
-TBD
+```
+perl extract.pl dbhost username password dbname
+```
 
