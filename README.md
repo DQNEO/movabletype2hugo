@@ -23,7 +23,7 @@ And finaly you can get the Hugo style content files by compiling them.
 
 # SEE ALSO
 
-My investigation
+My investigation on MovableType and Hugo
 
 http://qiita.com/DQNEO/items/7c05252fa434c861d938
 
