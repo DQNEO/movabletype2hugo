@@ -2,8 +2,9 @@
 use strict;
 use warnings;
 use DBI;
-use Data::Dumper;
+use autodie;
 use Time::Piece;
+use Data::Dumper;
 
 my $host = shift;
 my $user = shift;
