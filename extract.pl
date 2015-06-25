@@ -40,11 +40,11 @@ for my $row (@$rows) {
         , $row->{entry_basename});
 
     #warn Dumper $row;
-    my $front_matter = {
+    my $front_matter = FrontMatter->new({
         date => "2015-06-22T20:17:39+09:00",
         title => $row->{entry_title},
         categories => [ "Development" ],
-    };
+    });
 
     make_entry_file($out_dir , $permalink, $front_matter, $row->{entry_text}, $row->{entry_text_more});
 }
@@ -52,7 +52,10 @@ for my $row (@$rows) {
 sub make_entry_file {
     my ($out_dir, $filename, $front_matter, $text, $more_text) = @_;
 
+    print $front_matter->to_text;
+    return;
     open(my $fh,  ">", $out_dir . "/" . $filename);
+
     print $fh $text;
 
     if ($more_text) {
@@ -61,4 +64,21 @@ sub make_entry_file {
     }
 
     close($fh);
+}
+
+package FrontMatter;
+
+sub new {
+    my ($class, $self) = @_;
+    bless $self, $class;
+}
+
+sub to_text {
+    my $self = shift;
+    my $text = "+++\n";
+    $text .= "date = \"2015-06-22T20:05:11+09:00\"\n";
+    $text .= "title = \"" . $self->{title} . "\"\n";
+    $text .= "categories = [" . "]\n";
+    $text .= "+++\n";
+    return $text;
 }
