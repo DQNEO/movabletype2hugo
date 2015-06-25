@@ -21,7 +21,9 @@ SELECT   entry_id
        , entry_title
        , entry_text
        , entry_text_more
-FROM mt_entry LIMIT 20
+ FROM mt_entry
+ ORDER BY entry_id DESC
+ LIMIT 20
 ";
 my $sth = $dbh->prepare($sql);
 $sth->execute;
