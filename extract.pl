@@ -7,12 +7,13 @@ use autodie;
 use Time::Piece;
 use Data::Dumper;
 
-
+# MySQL DB Connection Info
 my $host = shift;
 my $user = shift;
 my $passwd = shift;
 my $dbname = shift;
 
+# make output directory
 my $out_dir = "public";
 mkdir($out_dir) if ! -d $out_dir;
 
