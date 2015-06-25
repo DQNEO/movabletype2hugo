@@ -7,32 +7,18 @@ use autodie;
 use Time::Piece;
 use Data::Dumper;
 
+
 my $host = shift;
 my $user = shift;
 my $passwd = shift;
 my $dbname = shift;
-my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
-
-# SELECT
-my $sql = "
-SELECT   entry_id
-       , entry_basename
-       , entry_authored_on
-       , entry_title
-       , entry_text
-       , entry_text_more
- FROM mt_entry
- ORDER BY entry_id DESC
- LIMIT 20
-";
-my $sth = $dbh->prepare($sql);
-$sth->execute;
-
-# iterate
-my $rows = $sth->fetchall_arrayref(+{});
 
 my $out_dir = "public";
 mkdir($out_dir) if ! -d $out_dir;
+
+my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
+my $db = DB->new({dbh=>$dbh});
+my $rows = $db->get_entries;
 
 for my $row (@$rows) {
 
@@ -67,6 +53,32 @@ sub make_entry_file {
     }
 
     close($fh);
+}
+
+package DB;
+sub new {
+    my ($class, $self) = @_;
+    bless $self, $class;
+}
+
+sub get_entries {
+    my $self = shift;
+    # SELECT
+    my $sql = "
+SELECT   entry_id
+       , entry_basename
+       , entry_authored_on
+       , entry_title
+       , entry_text
+       , entry_text_more
+ FROM mt_entry
+ ORDER BY entry_id DESC
+ LIMIT 20
+";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute;
+
+    return $sth->fetchall_arrayref(+{});
 }
 
 package FrontMatter;
