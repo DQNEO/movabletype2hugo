@@ -39,6 +39,7 @@ for my $entry (@$entries) {
     my $cat_ids = $relation->{$entry->{entry_id}};
     my @categories = map { $cats_master->{$_}} @$cat_ids;
     my $front_matter = FrontMatter->new({
+        entry_id => $entry->{entry_id},
         date => $time,
         title => $entry->{entry_title},
         categories => \@categories,
@@ -143,6 +144,7 @@ sub to_text {
 
     $self->{title} =~ s/"/\\"/g;
     my @lines;
+    push @lines, "mt_entry_id = " . $self->{entry_id} . "\n";
     push @lines, "date = \"" . $self->{date}->datetime . $time_shift . "\"\n";
     push @lines, "title = \"" . $self->{title} . "\"\n";
     push @lines, "categories = [" . join(",", @categories) . "]\n";
