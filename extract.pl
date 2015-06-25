@@ -12,7 +12,7 @@ my $dbname = shift;
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
 
 # SELECT
-my $sql = "SELECT entry_id, entry_basename, entry_authored_on FROM mt_entry";
+my $sql = "SELECT entry_id, entry_basename, entry_authored_on FROM mt_entry LIMIT 20";
 my $sth = $dbh->prepare($sql);
 $sth->execute;
 
