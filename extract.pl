@@ -7,6 +7,8 @@ use autodie;
 use Time::Piece;
 use Data::Dumper;
 use Carp;
+use File::Path qw(make_path);
+use File::Basename;
 
 # MySQL DB Connection Info
 my $host = shift;
@@ -29,7 +31,7 @@ for my $entry (@$entries) {
 
     die "no text in entry_id= " . $entry->{entry_id} if ! $entry->{entry_text};
     my $time = Time::Piece->strptime($entry->{entry_authored_on}, "%Y-%m-%d %H:%M:%S");
-    my $permalink = sprintf( "%04d@%02d@%s.html"
+    my $permalink = sprintf( "%04d/%02d/%s.html"
         , $time->year
         , $time->mon
         , $entry->{entry_basename});
@@ -51,6 +53,8 @@ for my $entry (@$entries) {
 sub make_entry_file {
     my ($out_dir, $filename, $front_matter, $text, $more_text) = @_;
     Carp::croak "undefined text" if ! $text;
+
+    File::Path::make_path($out_dir . '/' . File::Basename::dirname($filename));
     open(my $fh,  ">", $out_dir . "/" . $filename);
 
     print $fh $front_matter->to_text;
