@@ -61,6 +61,10 @@ sub make_entry_file {
 }
 
 package MTDB;
+use strict;
+use warnings;
+use autodie;
+
 sub new {
     my ($class, $self) = @_;
     bless $self, $class;
