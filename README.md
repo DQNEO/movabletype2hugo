@@ -13,7 +13,7 @@ perl extract.pl dbhost username password dbname
 This tool does 2 things.
 
 * extracts all entries and categories from MySQL
-* generate text files into ./content directory
+* generate text files into ./content directory , following HUGO rules.
 
 We assume that permalinks of articles on MT are like this:
 http://example.com/YYYY/MM/foobar.html
