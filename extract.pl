@@ -50,6 +50,9 @@ for my $entry (@$entries) {
     make_entry_file($out_dir , $permalink, $front_matter, $entry->{entry_text}, $entry->{entry_text_more});
 }
 
+my $num = @$entries;
+print $num . " files are generated into ./" . $out_dir . " directory\n";
+
 sub make_entry_file {
     my ($out_dir, $filename, $front_matter, $text, $more_text) = @_;
     Carp::croak "undefined text" if ! $text;
