@@ -81,6 +81,7 @@ sub to_text {
     my $self = shift;
     my $time_shift = "+09:00";
 
+    $self->{title} =~ s/"/\\"/g;
     my $text = "+++\n";
     $text .= "date = \"" . $self->{date}->datetime . $time_shift . "\"\n";
     $text .= "title = \"" . $self->{title} . "\"\n";
