@@ -17,7 +17,7 @@ my $out_dir = "public";
 mkdir($out_dir) if ! -d $out_dir;
 
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
-my $db = DB->new({dbh=>$dbh});
+my $db = MTDB->new({dbh=>$dbh});
 my $rows = $db->get_entries;
 
 for my $row (@$rows) {
@@ -55,7 +55,7 @@ sub make_entry_file {
     close($fh);
 }
 
-package DB;
+package MTDB;
 sub new {
     my ($class, $self) = @_;
     bless $self, $class;
