@@ -18,24 +18,24 @@ mkdir($out_dir) if ! -d $out_dir;
 
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
 my $db = MTDB->new({dbh=>$dbh});
-my $rows = $db->get_entries;
+my $entries = $db->get_entries;
 
-for my $row (@$rows) {
+for my $entry (@$entries) {
 
-    my $t = Time::Piece->strptime($row->{entry_authored_on}, "%Y-%m-%d %H:%M:%S");
+    my $t = Time::Piece->strptime($entry->{entry_authored_on}, "%Y-%m-%d %H:%M:%S");
     my $permalink = sprintf( "%04d@%02d@%s.html"
         , $t->year
         , $t->mon
-        , $row->{entry_basename});
+        , $entry->{entry_basename});
 
-    #warn Dumper $row;
+    #warn Dumper $entry;
     my $front_matter = FrontMatter->new({
         date => $t,
-        title => $row->{entry_title},
+        title => $entry->{entry_title},
         categories => [ "Development" ],
     });
 
-    make_entry_file($out_dir , $permalink, $front_matter, $row->{entry_text}, $row->{entry_text_more});
+    make_entry_file($out_dir , $permalink, $front_matter, $entry->{entry_text}, $entry->{entry_text_more});
 }
 
 sub make_entry_file {
