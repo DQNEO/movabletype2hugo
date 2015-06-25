@@ -26,10 +26,10 @@ my $entries = $db->get_entries;
 
 for my $entry (@$entries) {
 
-    my $t = Time::Piece->strptime($entry->{entry_authored_on}, "%Y-%m-%d %H:%M:%S");
+    my $time = Time::Piece->strptime($entry->{entry_authored_on}, "%Y-%m-%d %H:%M:%S");
     my $permalink = sprintf( "%04d@%02d@%s.html"
-        , $t->year
-        , $t->mon
+        , $time->year
+        , $time->mon
         , $entry->{entry_basename});
 
     #warn Dumper $entry;
@@ -37,7 +37,7 @@ for my $entry (@$entries) {
     my $cat_ids = $relation->{$entry->{entry_id}};
     my @categories = map { $cats_master->{$_}} @$cat_ids;
     my $front_matter = FrontMatter->new({
-        date => $t,
+        date => $time,
         title => $entry->{entry_title},
         categories => \@categories,
     });
