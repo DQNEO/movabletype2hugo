@@ -83,7 +83,6 @@ SELECT   entry_id
        , entry_text_more
  FROM mt_entry
  ORDER BY entry_id DESC
- LIMIT 20
 ";
     my $sth = $self->{dbh}->prepare($sql);
     $sth->execute;
