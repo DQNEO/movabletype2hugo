@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use DBI;
 use Data::Dumper;
+use Time::Piece;
 
 my $host = shift;
 my $user = shift;
@@ -19,6 +20,8 @@ $sth->execute;
 my $rows = $sth->fetchall_arrayref(+{});
 
 for my $row (@$rows) {
-    warn Dumper $row;
-}
 
+    my $t = Time::Piece->strptime($row->{entry_authored_on}, "%Y-%m-%d %H:%M:%S");
+    printf "%s => %04d/%02d\n",  $row->{entry_authored_on}, $t->year , $t->mon ;
+    #warn Dumper $row;
+}
