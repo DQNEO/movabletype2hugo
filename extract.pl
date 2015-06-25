@@ -19,8 +19,9 @@ mkdir($out_dir) if ! -d $out_dir;
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
 my $db = MTDB->new({dbh=>$dbh});
 my $cats_master = $db->get_categories_master;
+my $entry_cat_rel = $db->get_relation;
 
-warn Dumper $cats_master;
+warn Dumper $entry_cat_rel;
 exit;
 
 my $entries = $db->get_entries;
@@ -105,6 +106,25 @@ SELECT   category_id
     my $rows = $sth->fetchall_arrayref(+{});
     my %map = map {$_->{category_id} => $_->{category_label}  } @$rows;
     return \%map;
+}
+
+sub get_relation {
+    my $self = shift;
+    my $sql = "
+    SELECT * FROM mt_placement
+";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute;
+    my $rows = $sth->fetchall_arrayref(+{});
+    my %entries;
+    for my $row (@$rows)  {
+        if (! defined $entries{$row->{placement_entry_id}}) {
+            $entries{$row->{placement_entry_id}} = [];
+        }
+        push @{$entries{$row->{placement_entry_id}}}, $row->{placement_category_id};
+    }
+
+    return \%entries;
 }
 
 package FrontMatter;
