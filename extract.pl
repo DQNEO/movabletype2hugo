@@ -18,6 +18,11 @@ mkdir($out_dir) if ! -d $out_dir;
 
 my $dbh = DBI->connect("DBI:mysql:$dbname:".$host, $user, $passwd);
 my $db = MTDB->new({dbh=>$dbh});
+my $cats = $db->get_categories_master;
+
+warn Dumper $cats;
+exit;
+
 my $entries = $db->get_entries;
 
 for my $entry (@$entries) {
@@ -79,6 +84,23 @@ SELECT   entry_id
     $sth->execute;
 
     return $sth->fetchall_arrayref(+{});
+}
+
+sub get_categories_master {
+    my $self = shift;
+    # SELECT
+    my $sql = "
+SELECT   category_id
+       , category_label
+ FROM mt_category
+ ORDER BY category_id
+";
+    my $sth = $self->{dbh}->prepare($sql);
+    $sth->execute;
+
+    my $rows = $sth->fetchall_arrayref(+{});
+    my %map = map {$_->{category_id} => $_->{category_label}  } @$rows;
+    return \%map;
 }
 
 package FrontMatter;
